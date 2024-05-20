@@ -9,7 +9,7 @@ export class FleetUtils {
 
     constructor(page : Page) {
         this.page = page;
-        this.maxTry = process.env.MAX_COUNT_DEPART ? parseInt(process.env.MAX_COUNT_DEPART) : 5;
+        this.maxTry = process.env.MAX_COUNT_DEPART ? parseInt(process.env.MAX_COUNT_DEPART) : 10;
     }
 
     public async departPlanes() {
