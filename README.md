@@ -9,8 +9,8 @@ This repository contains a bot for Airline Manager 4, built with Playwright and 
 - Depart all planes.
 
 ### To Be Implemented
-- Schedule repairs and A-Checks as needed.
-- Buy fuel and CO2 at higher prices if supplies are nearly depleted.
+- Schedule repairs and A-Checks if needed.
+- Buy fuel and CO2 at higher prices if supplies are nearly finished.
 
 ## Usage Instructions
 
