@@ -30,11 +30,7 @@ export class GeneralUtils {
         await page.locator('#lPass').fill(this.password);
         await page.getByRole('button', { name: 'Login', exact: true }).click();
 
-        await GeneralUtils.sleep(5000);
-
-        if(await page.locator('#intro_popup span').isVisible()) {
-            await page.locator('#intro_popup span').click();
-        }
+        await page.locator('#intro_popup span').click();
 
         console.log('Logged in successfully!');
     }
