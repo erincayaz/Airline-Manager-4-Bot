@@ -27,7 +27,6 @@ jobs:
         echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env
         echo "MAX_FUEL_PRICE=${{ vars.MAX_FUEL_PRICE }}" >> .env
         echo "MAX_CO2_PRICE=${{ vars.MAX_CO2_PRICE }}" >> .env
-        echo "MAX_COUNT_DEPART=${{ vars.MAX_COUNT_DEPART }}" >> .env
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4

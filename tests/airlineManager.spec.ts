@@ -41,9 +41,9 @@ test('All Operations', async ({ page }) => {
   // Repair Planes if needed //
   await page.locator('div:nth-child(4) > #mapMaint > img').click();
   
-  await maintenanceUtils.repairPlanes();
-  await GeneralUtils.sleep(1000);
   await maintenanceUtils.checkPlanes();
+  await GeneralUtils.sleep(1000);
+  await maintenanceUtils.repairPlanes();
   await GeneralUtils.sleep(1000);
 
   await page.locator('#popup > .modal-dialog > .modal-content > .modal-header > div > .glyphicons').click();
