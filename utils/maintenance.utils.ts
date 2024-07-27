@@ -24,11 +24,20 @@ export class MaintenanceUtils {
         await this.page.getByRole('button', { name: ' Bulk check' }).click();
 
         await GeneralUtils.sleep(2000);
-        const allCheckHours = await this.page.locator('.bg-white > .text-success')
-        const count = await allCheckHours.count();
         let clicked = false;
+
+        const allCheckHoursDanger = await this.page.locator('.bg-white > .text-danger')
+        let count = await allCheckHoursDanger.count();        
         for(let i = 0; i < count; i++) {
-            const element = await allCheckHours.nth(i);
+            const element = await allCheckHoursDanger.nth(i);
+
+            await element.click();
+            clicked = true;
+        }
+
+        const allCheckHoursSuccess = await this.page.locator('.bg-white > .text-success')
+        for(let i = 0; i < count; i++) {
+            const element = await allCheckHoursSuccess.nth(i);
             const text = await element.innerText();
             const hoursToCheck = parseInt(text);
 
@@ -42,7 +51,7 @@ export class MaintenanceUtils {
         }
 
         if(clicked) {
-            await this.page.getByRole('button', { name: 'Plan bulk check' });
+            await this.page.getByRole('button', { name: 'Plan bulk check' }).click();
         }
     }
 }
