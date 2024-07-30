@@ -23,7 +23,7 @@ export class FleetUtils {
             let departAll = await this.page.locator('#departAll');
             
             await departAll.click();
-            await GeneralUtils.sleep(2000);
+            await GeneralUtils.sleep(1500);
             
             const cantDepartPlane = await this.page.getByText('×Unable to departSome A/C was').isVisible();
             if(cantDepartPlane)

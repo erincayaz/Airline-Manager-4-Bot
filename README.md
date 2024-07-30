@@ -7,8 +7,6 @@ This repository contains a bot for Airline Manager 4, built with Playwright and 
 - Start an eco-friendly campaign if not already started.
 - Buy fuel and CO2 if prices are below specified thresholds.
 - Depart all planes.
-
-### To Be Implemented
 - Schedule repairs and A-Checks if needed.
 - Buy fuel and CO2 at higher prices if supplies are nearly finished.
 

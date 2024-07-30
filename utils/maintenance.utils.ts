@@ -26,27 +26,18 @@ export class MaintenanceUtils {
         await GeneralUtils.sleep(2000);
         let clicked = false;
 
-        const allCheckHoursDanger = await this.page.locator('.bg-white > .text-danger')
-        let count = await allCheckHoursDanger.count();        
-        for(let i = 0; i < count; i++) {
-            const element = await allCheckHoursDanger.nth(i);
+        // Click only planes with danger text
+        const dangerChecksExits = await this.page.locator('.bg-white > .text-danger').first().isVisible();
+        if(dangerChecksExits) {
+            const allCheckHoursDanger = await this.page.locator('.bg-white > .text-danger');
+            let count = await allCheckHoursDanger.count();        
+            for(let i = 0; i < count; i++) {
+                const element = await allCheckHoursDanger.first();
 
-            await element.click();
-            clicked = true;
-        }
-
-        const allCheckHoursSuccess = await this.page.locator('.bg-white > .text-success')
-        for(let i = 0; i < count; i++) {
-            const element = await allCheckHoursSuccess.nth(i);
-            const text = await element.innerText();
-            const hoursToCheck = parseInt(text);
-
-            if(hoursToCheck < 30) {
                 await element.click();
                 clicked = true;
-            }
-            else {
-                break;
+
+                await GeneralUtils.sleep(500);
             }
         }
 
