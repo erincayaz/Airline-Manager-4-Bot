@@ -22,13 +22,13 @@ export class GeneralUtils {
 
         await page.goto('https://www.airlinemanager.com/');
 
-        await page.getByRole('button', { name: 'Login to Airline Manager 4' }).click();
+        await page.getByRole('button', { name: 'PLAY FREE NOW' }).click();
         await page.locator('#lEmail').click();
         await page.locator('#lEmail').fill(this.username);
         await page.locator('#lEmail').press('Tab');
         await page.locator('#lPass').click();
         await page.locator('#lPass').fill(this.password);
-        await page.getByRole('button', { name: 'Login', exact: true }).click();
+        await page.getByRole('button', { name: 'Log In', exact: true }).click();
 
         await page.locator('#intro_popup span').click();
 
