@@ -23,8 +23,8 @@ jobs:
     - name: Create .env file
       run: |
         touch .env
-        echo "EMAIL=${{ secrets.EMAIL-OVO }}" >> .env
-        echo "PASSWORD=${{ secrets.PASSWORD-OVO }}" >> .env
+        echo "EMAIL=${{ secrets.EMAILOVO }}" >> .env
+        echo "PASSWORD=${{ secrets.PASSWORDOVO }}" >> .env
         echo "MAX_FUEL_PRICE=${{ vars.MAX_FUEL_PRICE }}" >> .env
         echo "MAX_CO2_PRICE=${{ vars.MAX_CO2_PRICE }}" >> .env
     - name: Run Playwright tests
