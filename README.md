@@ -33,7 +33,8 @@ This repository contains a bot for Airline Manager 4, built with Playwright and 
 5. The workflow will now be triggered twice every hour at 01 and 31 minutes.
 
 ## Notes
+- Language of your game must be **English** for this bot to work.
 - Trigger times may vary due to heavy loads on GitHub Actions.
 - To change the schedule, edit the **cron** expression under **schedule** in `.github/workflows/playwright.yml`. Use [crontab.guru](https://crontab.guru/) to generate your desired cron expression.
-- If you don't want your repo to be public you can clone this project and commit it to your private repo. 
+- If you don't want your repo to be public you can clone this project and commit it to your private repo.
 - For questions, reach out on Discord: `muhittin852`.
