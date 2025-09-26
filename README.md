@@ -5,6 +5,7 @@ This repository contains a bot for Airline Manager 4, built with Playwright and 
 
 ### Implemented
 - Start an eco-friendly campaign if not already started.
+- Start a campaign to increase airline reputation.
 - Buy fuel and CO2 if prices are below specified thresholds.
 - Depart all planes.
 - Schedule repairs and A-Checks if needed.
@@ -23,6 +24,10 @@ This repository contains a bot for Airline Manager 4, built with Playwright and 
    - Create the following variables:
      - `MAX_FUEL_PRICE`: 550 (Set your desired price. The bot will buy fuel if the current price is lower.)
      - `MAX_CO2_PRICE`: 120 (Same as fuel.)
+   - If you want bot to start a campaign to increase airline reputation you need to set these variables:
+     - `INCREASE_AIRLINE_REPUTATION`: true
+     - `CAMPAIGN_TYPE`: 1 (You can set this to your desired campaign type)
+     - `CAMPAIGN_DURATION`: 4 (Again you can set this to your desired campaign duration)
 4. **Enable workflows:**
    - Go to **Actions** and enable workflows.
 5. The workflow will now be triggered twice every hour at 01 and 31 minutes.
