@@ -1,17 +1,17 @@
 {
   "name": "airline-manager-bot",
-  "version": "1.0.0",
+  "version": "1.2.5",
   "description": "",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.44.0",
-    "@types/node": "^20.12.12"
+    "@playwright/test": "1.55.1",
+    "@types/node": "20.12.12"
   },
   "dependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "16.4.5"
   }
 }
