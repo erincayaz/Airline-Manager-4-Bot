@@ -1,61 +1,43 @@
 import { Page } from "@playwright/test";
 import { GeneralUtils } from "./general.utils";
 
+const ECO_FRIENDLY_DURATION_HOURS = 12;
+const ECO_FRIENDLY_DURATION_OPTION = (ECO_FRIENDLY_DURATION_HOURS / 4).toString();
+
 export class CampaignUtils {
     page: Page;
 
-    increaseAirlineReputation: boolean = false;
-    campaignType: number = 1;
-    campaignDuration: number = 4;
-
     constructor(page: Page) {
-        if(process.env.INCREASE_AIRLINE_REPUTATION === 'true') {
-            this.increaseAirlineReputation = true;
-            this.campaignType = parseInt(process.env.CAMPAIGN_TYPE!);
-            this.campaignDuration = parseInt(process.env.CAMPAIGN_DURATION!);
-        }
-
         this.page = page;
     }
 
     private async createEcoFriendly() {
-        const isEcoFriendExists = await this.page.getByRole('cell', { name: ' Eco friendly' }).isVisible();
-        if(!isEcoFriendExists) {
-            await this.page.getByRole('button', { name: ' New campaign' }).click();
-            await this.page.getByRole('cell', { name: 'Eco-friendly Increases' }).click();
-            await this.page.getByRole('button', { name: '$' }).click();
-
-            console.log("Eco Friendly Campaign Created Successfully!");
+        const isEcoFriendlyExists = await this.page.getByRole('cell', { name: ' Eco friendly' }).isVisible().catch(() => false);
+        if (isEcoFriendlyExists) {
+            console.log('Eco Friendly campaign is already active.');
+            return;
         }
-    }
 
-    private async createReputation() {
-        const campaignType = this.campaignType.toString();
-        const durationOption = (Math.floor(this.campaignDuration / 4) || 1).toString();
+        await this.page.getByRole('button', { name: ' New campaign' }).click();
+        await this.page.getByRole('cell', { name: 'Eco-friendly Increases' }).click();
 
-        const isAirlineReputationExists = await this.page.getByRole('cell', { name: ' Airline reputation' }).isVisible();
-        if (!isAirlineReputationExists) {
-            await this.page.getByRole('button', { name: ' New campaign' }).click();
-            await this.page.getByRole('cell', { name: 'Increase airline reputation' }).click();
-            await this.page.locator('#dSelector').selectOption(durationOption);
-            await this.page.locator(`tr:has(td:has-text("Campaign ${campaignType}")) .btn-danger`).click();
-
-            console.log("Increased Airline Reputation Successfully!");
+        const durationSelector = this.page.locator('#dSelector');
+        if (await durationSelector.isVisible().catch(() => false)) {
+            await durationSelector.selectOption(ECO_FRIENDLY_DURATION_OPTION);
         }
+
+        await this.page.getByRole('button', { name: '$' }).click();
+        console.log(`Eco Friendly campaign created successfully for ${ECO_FRIENDLY_DURATION_HOURS} hours.`);
     }
 
     public async createCampaign() {
-        console.log('Create Campaing Started...')
+        console.log('Create Campaign Started...');
 
         await this.page.getByRole('button', { name: ' Marketing' }).click();
-
-        await GeneralUtils.sleep(1000);
+        // Wait for the 'New campaign' button to appear as a signal the modal is ready
+        await this.page.getByRole('button', { name: ' New campaign' }).waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
 
         await this.createEcoFriendly();
-
-        if(this.increaseAirlineReputation) {
-            await this.createReputation();
-        }
 
         console.log('Campaign Created Finished!');
     }
