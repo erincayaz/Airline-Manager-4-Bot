@@ -1,53 +1,49 @@
 name: Playwright Tests
 on:
+  # Scheduling moved to cron-job.org for better reliability
   workflow_dispatch:
-  schedule:
-    - cron: "01,31 * * * *"
+  # schedule:
+  # - cron: "0 22 * * *"
+  # - cron: "0 0,2,4,6,8 * * *"
+  # - cron: "0 11,14,17,20 * * *"
+permissions:
+  contents: read
 jobs:
   test:
-    timeout-minutes: 15 
+    timeout-minutes: 10
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
-
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
       with:
-        node-version: '22'
-
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Get Playwright version
-      id: pw-version
-      run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
-
-    - uses: actions/cache@v4
-      id: playwright-cache
+        persist-credentials: false
+    - uses: actions/cache@v5
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ steps.pw-version.outputs.version }}
-
-    - name: Disable Man-DB Auto-Update
-      run: |
-        sudo debconf-set-selections <<< "man-db man-db/auto-update boolean false"
-        sudo dpkg-reconfigure man-db
-
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+    - uses: actions/setup-node@v6
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
     - name: Install Playwright Browsers
-      env:
-        NODE_OPTIONS: "--max-old-space-size=4096"
       run: npx playwright install --with-deps chromium
-
-    - name: Create .env file
-      run: |
-        touch .env
-        echo "EMAIL=${{ secrets.EMAIL }}" >> .env
-        echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env
-        echo "MAX_FUEL_PRICE=${{ vars.MAX_FUEL_PRICE }}" >> .env
-        echo "MAX_CO2_PRICE=${{ vars.MAX_CO2_PRICE }}" >> .env
-        echo "INCREASE_AIRLINE_REPUTATION=${{ vars.INCREASE_AIRLINE_REPUTATION }}" >> .env
-        echo "CAMPAIGN_TYPE=${{ vars.CAMPAIGN_TYPE }}" >> .env
-        echo "CAMPAIGN_DURATION=${{ vars.CAMPAIGN_DURATION }}" >> .env
-
     - name: Run Playwright tests
       run: npx playwright test
-      
+      env:
+        EMAIL: ${{ secrets.EMAIL }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        MAX_FUEL_PRICE: ${{ vars.MAX_FUEL_PRICE }}
+        MAX_CO2_PRICE: ${{ vars.MAX_CO2_PRICE }}
+        GAME_MODE: ${{ vars.GAME_MODE }}
+        MINIMUM_FUEL_COVER_HOURS: ${{ vars.MINIMUM_FUEL_COVER_HOURS }}
+        MINIMUM_CO2_COVER_HOURS: ${{ vars.MINIMUM_CO2_COVER_HOURS }}
+        AVERAGE_FUEL_BURN_PER_DEPARTURE: ${{ vars.AVERAGE_FUEL_BURN_PER_DEPARTURE }}
+        AVERAGE_CO2_BURN_PER_DEPARTURE: ${{ vars.AVERAGE_CO2_BURN_PER_DEPARTURE }}
+        MARKET_HISTORY_FILE: ${{ vars.MARKET_HISTORY_FILE }}
+        MAX_PRICE_UPDATES_PER_RUN: ${{ vars.MAX_PRICE_UPDATES_PER_RUN }}
+        ENABLE_PRICING: ${{ vars.ENABLE_PRICING || 'false' }}
+        EASY_MODE_ECONOMY_MULTIPLIER_PERCENT: ${{ vars.EASY_MODE_ECONOMY_MULTIPLIER_PERCENT }}
+        EASY_MODE_BUSINESS_MULTIPLIER_PERCENT: ${{ vars.EASY_MODE_BUSINESS_MULTIPLIER_PERCENT }}
+        EASY_MODE_FIRST_MULTIPLIER_PERCENT: ${{ vars.EASY_MODE_FIRST_MULTIPLIER_PERCENT }}
+        EASY_MODE_CARGO_LARGE_MULTIPLIER_PERCENT: ${{ vars.EASY_MODE_CARGO_LARGE_MULTIPLIER_PERCENT }}
+        EASY_MODE_CARGO_HEAVY_MULTIPLIER_PERCENT: ${{ vars.EASY_MODE_CARGO_HEAVY_MULTIPLIER_PERCENT }}

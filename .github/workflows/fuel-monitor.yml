@@ -1,0 +1,40 @@
+name: Fuel Monitor (30m)
+on:
+  # Scheduling moved to cron-job.org for better reliability
+  workflow_dispatch:
+  # schedule:
+  # - cron: "*/30 * * * *"
+permissions:
+  contents: read
+jobs:
+  monitor:
+    timeout-minutes: 5
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - uses: actions/cache@v5
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+    - uses: actions/setup-node@v6
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
+    - name: Run Fuel Monitor
+      run: npx playwright test tests/fuelMonitor.spec.ts
+      env:
+        EMAIL: ${{ secrets.EMAIL }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        MAX_FUEL_PRICE: ${{ vars.MAX_FUEL_PRICE }}
+        MAX_CO2_PRICE: ${{ vars.MAX_CO2_PRICE }}
+        GAME_MODE: ${{ vars.GAME_MODE }}
+        MINIMUM_FUEL_COVER_HOURS: ${{ vars.MINIMUM_FUEL_COVER_HOURS }}
+        MINIMUM_CO2_COVER_HOURS: ${{ vars.MINIMUM_CO2_COVER_HOURS }}
+        AVERAGE_FUEL_BURN_PER_DEPARTURE: ${{ vars.AVERAGE_FUEL_BURN_PER_DEPARTURE }}
+        AVERAGE_CO2_BURN_PER_DEPARTURE: ${{ vars.AVERAGE_CO2_BURN_PER_DEPARTURE }}
+        MARKET_HISTORY_FILE: ${{ vars.MARKET_HISTORY_FILE }}
